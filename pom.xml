@@ -4,10 +4,18 @@
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <modelVersion>4.0.0</modelVersion>
 
-    <groupId>com.github.taller</groupId>
-    <artifactId>calculator</artifactId>
-    <packaging>jar</packaging>
+    <groupId>com.github.taller.calculator</groupId>
+    <artifactId>parent</artifactId>
+    <packaging>pom</packaging>
     <version>1.0-SNAPSHOT</version>
+    <name>Calculator parent</name>
+
+    <modules>
+        <module>exports</module>
+        <module>core</module>
+        <module>basic-operations</module>
+        <module>trigonometric-operations</module>
+    </modules>
 
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
@@ -17,39 +25,14 @@
         <maven.compiler.target>1.8</maven.compiler.target>
     </properties>
 
-    <build>
-        <plugins>
-            <plugin>
-                <groupId>org.apache.maven.plugins</groupId>
-                <artifactId>maven-resources-plugin</artifactId>
-                <version>2.7</version>
-
-                <executions>
-                    <execution>
-                        <id>copy-resources</id>
-                        <!-- here the phase you need -->
-                        <phase>compile</phase>
-                        <goals>
-                            <goal>copy-resources</goal>
-                        </goals>
-                        <configuration>
-                            <outputDirectory>${basedir}/target/classes</outputDirectory>
-                            <encoding>UTF-8</encoding>
-                            <resources>
-                                <resource>
-                                    <directory>src/main/java</directory>
-                                    <includes>
-                                        <include>**/*.properties</include>
-                                        <include>**/*.fxml</include>
-                                        <include>**/*.png</include>
-                                    </includes>
-                                </resource>
-                            </resources>
-                        </configuration>
-                    </execution>
-                </executions>
-            </plugin>
-        </plugins>
-    </build>
+    <dependencyManagement>
+        <dependencies>
+            <dependency>
+                <groupId>com.github.taller.calculator</groupId>
+                <artifactId>exports</artifactId>
+                <version>1.0-SNAPSHOT</version>
+            </dependency>
+        </dependencies>
+    </dependencyManagement>
 
 </project>
