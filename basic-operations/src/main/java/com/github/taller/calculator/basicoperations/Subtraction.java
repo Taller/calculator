@@ -17,4 +17,8 @@ public class Subtraction extends AbstractOperation {
         return "Subtraction.binary";
     }
 
+    @Override
+    public String toString() {
+        return "-";
+    }
 }

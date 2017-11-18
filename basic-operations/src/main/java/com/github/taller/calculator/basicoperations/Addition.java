@@ -16,4 +16,9 @@ public class Addition extends AbstractOperation {
         System.out.println("Addition.binary");
         return "Addition.binary";
     }
+
+    @Override
+    public String toString() {
+        return "+";
+    }
 }

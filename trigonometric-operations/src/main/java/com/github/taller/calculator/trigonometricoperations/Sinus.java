@@ -20,4 +20,9 @@ public class Sinus extends AbstractOperation {
 
         return String.valueOf(value);
     }
+
+    @Override
+    public String toString() {
+        return "Sinus";
+    }
 }

@@ -19,4 +19,9 @@ public class Cosine extends AbstractOperation {
 
         return String.valueOf(value);
     }
+
+    @Override
+    public String toString() {
+        return "Cosine";
+    }
 }

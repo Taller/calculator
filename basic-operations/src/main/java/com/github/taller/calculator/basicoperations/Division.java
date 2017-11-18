@@ -17,4 +17,8 @@ public class Division extends AbstractOperation {
         return "Division.binary";
     }
 
+    @Override
+    public String toString() {
+        return "/";
+    }
 }

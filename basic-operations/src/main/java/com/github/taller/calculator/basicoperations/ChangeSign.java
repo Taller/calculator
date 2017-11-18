@@ -16,4 +16,8 @@ public class ChangeSign extends AbstractOperation {
         return "ChangeSign.unary";
     }
 
+    @Override
+    public String toString() {
+        return "(-)";
+    }
 }

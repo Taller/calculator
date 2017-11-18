@@ -17,4 +17,8 @@ public class Multiplication extends AbstractOperation {
         return "Multiplication.binary";
     }
 
+    @Override
+    public String toString() {
+        return "*";
+    }
 }
