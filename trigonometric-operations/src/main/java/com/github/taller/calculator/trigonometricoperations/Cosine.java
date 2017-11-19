@@ -21,6 +21,11 @@ public class Cosine extends AbstractOperation {
     }
 
     @Override
+    public boolean isFunction() {
+        return true;
+    }
+
+    @Override
     public String toString() {
         return "Cosine";
     }

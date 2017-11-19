@@ -21,4 +21,9 @@ public abstract class AbstractOperation implements Operation {
     public String function(String... arg) {
         throw new RuntimeException("Method is not defined");
     }
+
+    @Override
+    public boolean isFunction() {
+        return false;
+    }
 }

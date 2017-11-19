@@ -12,7 +12,16 @@ public class LeftParenthesis extends AbstractOperation {
 
     @Override
     public String function(String... arg) {
-        return super.function(arg);
+        if (arg.length >= 1) {
+            return arg[0];
+        }
+
+        return "0";
+    }
+
+    @Override
+    public boolean isFunction() {
+        return true;
     }
 
     @Override

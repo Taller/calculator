@@ -1,7 +1,7 @@
 package com.github.taller.calculator.model.plugin;
 
 import com.github.taller.calculator.exports.Operation;
-import com.github.taller.calculator.log.PrintMsg;
+import com.github.taller.calculator.log.Print;
 
 import java.io.BufferedReader;
 import java.io.InputStreamReader;
@@ -22,7 +22,7 @@ public class Plugin {
         this.url = url;
 
         this.cl = URLClassLoader.newInstance(new URL[]{url});
-        PrintMsg.act("" + this.cl);
+        Print.msg("" + this.cl);
 
         URL properties = cl.findResource("operations.properties");
         if (properties == null) {
@@ -30,12 +30,12 @@ public class Plugin {
         }
 
         if (properties == null) {
-            PrintMsg.act("operations.properties wasn't found.");
+            Print.msg("operations.properties wasn't found.");
             return;
         }
 
         actionList = new ArrayList<>();
-        PrintMsg.act("adding actions from " + url.getFile());
+        Print.msg("adding actions from " + url.getFile());
 
         String line = null;
         BufferedReader br = new BufferedReader(new InputStreamReader(properties.openStream()));
@@ -48,11 +48,11 @@ public class Plugin {
             String className = props[1];
             Class<Operation> clazz = (Class<Operation>) cl.loadClass(className);
             actionList.add(new Action(clazz, url));
-            PrintMsg.act("action added " + clazz.getCanonicalName());
+            Print.msg("action added " + clazz.getCanonicalName());
         }
 
         if (actionList.isEmpty()) {
-            PrintMsg.act("operations.properties is empty.");
+            Print.msg("operations.properties is empty.");
             return;
         }
     }

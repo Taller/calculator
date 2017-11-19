@@ -30,37 +30,61 @@ public final class DisplayModel {
         initCachedToString();
     }
 
-    public void removeLast() {
+    public void addCharacter(String ch) {
+        String editing = getEditingNumber();
+
+        if (editing.contains(".") && ".".equals(ch)) {
+            return;
+        }
+
+        if ("0".equals(editing) && !".".equals(ch)) {
+            editing = ch;
+        } else {
+            editing += ch;
+        }
+
+        DisplayItem newItem = new DisplayItem(editing);
+
+        if (isNew()) {
+            displayItems.add(newItem);
+            initCachedToString();
+
+        } else {
+            displayItems.removeLast();
+            displayItems.add(newItem);
+        }
+    }
+
+    public void removeCharacter() {
+
         if (displayItems.isEmpty()) {
             return;
         }
 
+        if (isNew()) {
+            displayItems.removeLast();
+            initCachedToString();
+            return;
+        }
+
+        String editing = getEditingNumber();
+        editing = editing.substring(0, editing.length() - 1);
+
+        DisplayItem newItem = new DisplayItem(editing);
+
         displayItems.removeLast();
 
-        initCachedToString();
-    }
-
-    public void addNewOrEditLastNumber(String newNumber) {
-        boolean add = false;
-
-        if (displayItems.isEmpty() || displayItems.getLast().isNumber()) {
-            add = true;
-        }
-
-        if (!displayItems.isEmpty() && displayItems.getLast().isNumber()) {
-            displayItems.removeLast();
-        }
-
-        DisplayItem di = new DisplayItem(newNumber);
-
-        displayItems.add(di);
-
-        if (add) {
-            initCachedToString();
+        if (editing.length() > 0) {
+            displayItems.add(newItem);
         }
     }
 
     private void initCachedToString() {
+        if (displayItems.isEmpty()) {
+            cachedToString = "";
+            return;
+        }
+
         StringBuilder sb = new StringBuilder();
         DisplayItem lastItem = displayItems.getLast();
         for (DisplayItem di : displayItems) {
@@ -84,10 +108,36 @@ public final class DisplayModel {
         return new LinkedList<>(displayItems);
     }
 
+    private String getEditingNumber() {
+        DisplayItem item = displayItems.peekLast();
+        if (item == null || item.isAction()) {
+            return "0";
+        }
+
+        if (item.isNumber()) {
+            return item.getNumber();
+        }
+
+        return "0";
+    }
+
+    private boolean isNew() {
+        DisplayItem item = displayItems.peekLast();
+        if (item == null || item.isAction()) {
+            return true;
+        }
+
+        if (item.isNumber()) {
+            return false;
+        }
+
+        return true;
+    }
+
     @Override
     public String toString() {
         if (displayItems.isEmpty()) {
-            return "";
+            return "0";
         }
 
         if (displayItems.getLast().isAction()) {

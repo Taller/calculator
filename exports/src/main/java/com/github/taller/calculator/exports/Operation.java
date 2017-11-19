@@ -9,4 +9,6 @@ public interface Operation {
     String binary(String argLeft, String argRight);
 
     String function(String ... arg);
+
+    boolean isFunction();
 }

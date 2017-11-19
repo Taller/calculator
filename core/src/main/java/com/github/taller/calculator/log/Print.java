@@ -1,8 +1,8 @@
 package com.github.taller.calculator.log;
 
-public class PrintMsg {
+public class Print {
 
-    public static void act(String msg) {
+    public static void msg(String msg) {
         System.out.println(msg);
     }
 }

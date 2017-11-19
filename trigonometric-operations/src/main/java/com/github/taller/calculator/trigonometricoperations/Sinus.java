@@ -22,6 +22,11 @@ public class Sinus extends AbstractOperation {
     }
 
     @Override
+    public boolean isFunction() {
+        return true;
+    }
+
+    @Override
     public String toString() {
         return "Sinus";
     }

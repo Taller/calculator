@@ -17,7 +17,7 @@ public class Division extends AbstractOperation {
     public String binary(String argLeft, String argRight) {
         BigDecimal bd1 = new BigDecimal(argLeft);
         BigDecimal bd2 = new BigDecimal(argRight);
-        BigDecimal bdResult = bd1.divide(bd2, BigDecimal.ROUND_CEILING);
+        BigDecimal bdResult = bd1.divide(bd2, 6, BigDecimal.ROUND_HALF_UP);
         System.out.println("Division.binary " + bdResult);
         return bdResult.toPlainString();
     }

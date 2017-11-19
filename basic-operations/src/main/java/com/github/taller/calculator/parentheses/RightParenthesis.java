@@ -7,12 +7,7 @@ public class RightParenthesis extends AbstractOperation {
 
     @Override
     public OperationType getType() {
-        return OperationType.FUNCTION;
-    }
-
-    @Override
-    public String function(String... arg) {
-        return super.function(arg);
+        return OperationType.UNARY;
     }
 
     @Override

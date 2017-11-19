@@ -1,7 +1,7 @@
 package com.github.taller.calculator.model.plugin;
 
 import com.github.taller.calculator.exports.Operation;
-import com.github.taller.calculator.log.PrintMsg;
+import com.github.taller.calculator.log.Print;
 
 import java.net.URL;
 import java.util.*;
@@ -31,7 +31,7 @@ public final class PluginModel {
     public void addPlugin(URL url) {
         try {
             Plugin plugin = new Plugin(url);
-            PrintMsg.act("" + plugin);
+            Print.msg("" + plugin);
             plugins.add(plugin);
 
             availableActions.addAll(plugin.getActionList());

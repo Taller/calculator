@@ -19,9 +19,6 @@ public class PluginsController {
     private Stage selfStage;
 
     @FXML
-    private AnchorPane AP;
-
-    @FXML
     ListView<Action> OPERATION_LIST;
 
     @FXML
@@ -54,12 +51,10 @@ public class PluginsController {
         FileChooser fileChooser = new FileChooser();
         fileChooser.setTitle("Open Resource File");
 
-        Stage stage = (Stage) AP.getScene().getWindow();
+        File fileForLoad = fileChooser.showOpenDialog(selfStage);
 
-        File f = fileChooser.showOpenDialog(stage);
-
-        if (f != null) {
-            PluginModel.getInstance().addPlugin(f.toURI().toURL());
+        if (fileForLoad != null) {
+            PluginModel.getInstance().addPlugin(fileForLoad.toURI().toURL());
         }
 
         PLUGIN_LIST.setItems(null);
