@@ -1,15 +1,14 @@
-package com.github.taller.calculator.model;
+package com.github.taller.calculator.model.plugin;
 
 import com.github.taller.calculator.exports.Operation;
 import com.github.taller.calculator.log.PrintMsg;
 
-import java.io.FileInputStream;
-import java.io.InputStream;
+import java.io.BufferedReader;
+import java.io.InputStreamReader;
 import java.net.URL;
 import java.net.URLClassLoader;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Properties;
 
 public class Plugin {
 
@@ -25,33 +24,37 @@ public class Plugin {
         this.cl = URLClassLoader.newInstance(new URL[]{url});
         PrintMsg.act("" + this.cl);
 
-        Properties p = new Properties();
-        URL properies = cl.findResource("operations.properties");
-        if (properies == null) {
-            properies = cl.getResource("operations.properties");
+        URL properties = cl.findResource("operations.properties");
+        if (properties == null) {
+            properties = cl.getResource("operations.properties");
         }
 
-        if (properies == null) {
+        if (properties == null) {
             PrintMsg.act("operations.properties wasn't found.");
             return;
         }
-        p.load(properies.openStream());
-
-        if (p.stringPropertyNames() == null || p.stringPropertyNames().isEmpty()) {
-            PrintMsg.act("operations.properties is empty.");
-            return;
-        }
-
-        PrintMsg.act("adding actions from " + url.getFile());
 
         actionList = new ArrayList<>();
-        for (String operation : p.stringPropertyNames()) {
-            String className = p.getProperty(operation);
+        PrintMsg.act("adding actions from " + url.getFile());
+
+        String line = null;
+        BufferedReader br = new BufferedReader(new InputStreamReader(properties.openStream()));
+        while ( (line = br.readLine()) != null) {
+            String[] props = line.split("=");
+            if (props.length < 2) {
+                continue;
+            }
+
+            String className = props[1];
             Class<Operation> clazz = (Class<Operation>) cl.loadClass(className);
             actionList.add(new Action(clazz, url));
             PrintMsg.act("action added " + clazz.getCanonicalName());
         }
 
+        if (actionList.isEmpty()) {
+            PrintMsg.act("operations.properties is empty.");
+            return;
+        }
     }
 
     public List<Action> getActionList() {

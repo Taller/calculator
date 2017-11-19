@@ -1,6 +1,7 @@
-package com.github.taller.calculator.model;
+package com.github.taller.calculator.model.plugin;
 
 import com.github.taller.calculator.exports.Operation;
+import com.github.taller.calculator.exports.OperationType;
 
 import java.net.URL;
 
@@ -16,6 +17,12 @@ public class Action {
         this.operation = clazz.newInstance();
         this.displayName = this.operation.toString();
         this.source = source;
+
+        if (!displayName.trim().endsWith("(")
+                && operation.getType() == OperationType.FUNCTION
+                && !displayName.trim().endsWith(")")) {
+            displayName += "(";
+        }
     }
 
     public Operation getOperation() {

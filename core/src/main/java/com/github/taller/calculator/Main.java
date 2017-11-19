@@ -1,7 +1,7 @@
 package com.github.taller.calculator;
 
 
-import com.github.taller.calculator.model.CalculatorModel;
+import com.github.taller.calculator.model.plugin.PluginModel;
 import com.github.taller.calculator.ui.AlertOnClose;
 import com.github.taller.calculator.ui.CalculatorController;
 import javafx.application.Application;
@@ -47,7 +47,7 @@ public class Main extends Application {
             }
         });
 
-        CalculatorModel.getInstance().addPlugin(new URL("file:./basic-operations-1.0-SNAPSHOT.jar"));
+        PluginModel.getInstance().addPlugin(new URL("file:./basic-operations-1.0-SNAPSHOT.jar"));
 
         firstTime = true;
         Platform.setImplicitExit(false);

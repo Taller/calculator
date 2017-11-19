@@ -1,15 +1,11 @@
 package com.github.taller.calculator.ui;
 
-import com.github.taller.calculator.model.Action;
-import com.github.taller.calculator.model.CalculatorModel;
-import com.github.taller.calculator.model.Plugin;
-import javafx.beans.property.ObjectProperty;
+import com.github.taller.calculator.model.plugin.Action;
+import com.github.taller.calculator.model.plugin.Plugin;
+import com.github.taller.calculator.model.plugin.PluginModel;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
-import javafx.event.ActionEvent;
-import javafx.event.Event;
 import javafx.fxml.FXML;
-import javafx.scene.Node;
 import javafx.scene.control.ListView;
 import javafx.scene.layout.AnchorPane;
 import javafx.stage.FileChooser;
@@ -44,7 +40,7 @@ public class PluginsController {
             return;
         }
 
-        CalculatorModel.getInstance().removePlugin(p.getUrl());
+        PluginModel.getInstance().removePlugin(p.getUrl());
 
         PLUGIN_LIST.setItems(null);
         OPERATION_LIST.setItems(null);
@@ -63,7 +59,7 @@ public class PluginsController {
         File f = fileChooser.showOpenDialog(stage);
 
         if (f != null) {
-            CalculatorModel.getInstance().addPlugin(f.toURI().toURL());
+            PluginModel.getInstance().addPlugin(f.toURI().toURL());
         }
 
         PLUGIN_LIST.setItems(null);
@@ -77,15 +73,15 @@ public class PluginsController {
     }
 
     private void addLoadedPluginsAndOperations() {
-        CalculatorModel calculatorModel = CalculatorModel.getInstance();
+        PluginModel pluginModel = PluginModel.getInstance();
 
         ObservableList<Plugin> observablePlugins = FXCollections.<Plugin>observableArrayList();
-        observablePlugins.addAll(calculatorModel.getPlugins());
+        observablePlugins.addAll(pluginModel.getPlugins());
 
         PLUGIN_LIST.setItems(observablePlugins);
 
         ObservableList<Action> observableActions = FXCollections.<Action>observableArrayList();
-        observableActions.addAll(calculatorModel.getAvailableActions());
+        observableActions.addAll(pluginModel.getAvailableActions());
 
         OPERATION_LIST.setItems(observableActions);
     }

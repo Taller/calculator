@@ -2,15 +2,19 @@ package com.github.taller.calculator.ui;
 
 
 import com.github.taller.calculator.Main;
-import com.github.taller.calculator.model.Action;
-import com.github.taller.calculator.model.CalculatorModel;
-import com.github.taller.calculator.model.Plugin;
+import com.github.taller.calculator.exports.Operation;
+import com.github.taller.calculator.exports.OperationType;
+import com.github.taller.calculator.model.calculation.CalculatorModel;
+import com.github.taller.calculator.model.display.DisplayItem;
+import com.github.taller.calculator.model.display.DisplayModel;
+import com.github.taller.calculator.model.plugin.Action;
+import com.github.taller.calculator.model.plugin.PluginModel;
+import com.github.taller.calculator.parentheses.RightParenthesis;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.Event;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
-import javafx.scene.Node;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
@@ -21,12 +25,14 @@ import javafx.stage.Modality;
 import javafx.stage.Stage;
 
 import java.io.IOException;
+import java.net.MalformedURLException;
+import java.util.LinkedList;
 
 public class CalculatorController {
 
     private Stage selfStage;
 
-    private String currentData = null;
+    private String currentNumber = "0";
 
     @FXML
     private Label DISPLAY;
@@ -44,45 +50,79 @@ public class CalculatorController {
 
         System.out.println("addDigit " + pressed);
 
-        if (currentData == null || ("0".equals(currentData) && !".".equals(pressed)) ) {
-            currentData = pressed;
+        if (("0".equals(currentNumber) && !".".equals(pressed))) {
+            currentNumber = pressed;
         } else {
-            currentData += pressed;
+            currentNumber += pressed;
         }
 
-        DISPLAY.setText(currentData);
+        DisplayModel displayModel = DisplayModel.getInstance();
+        displayModel.addNewOrEditLastNumber(currentNumber);
 
-        System.out.println(currentData);
+        DISPLAY.setText(displayModel.toString());
+
+        System.out.println(displayModel.toString());
     }
 
     @FXML
     public void removeDigit(MouseEvent event) {
         System.out.println("removeDigit");
 
-        if (currentData == null || currentData.isEmpty() || currentData.length() == 1) {
-            currentData = "0";
+        if ( currentNumber.isEmpty() || currentNumber.length() == 1) {
+            currentNumber = "0";
         } else {
-            currentData = currentData.substring(0, currentData.length() - 1);
+            currentNumber = currentNumber.substring(0, currentNumber.length() - 1);
         }
 
-        DISPLAY.setText(currentData);
+        DisplayModel displayModel = DisplayModel.getInstance();
 
-        System.out.println(currentData);
+        displayModel.addNewOrEditLastNumber(currentNumber);
+
+        DISPLAY.setText(displayModel.toString());
+
+        System.out.println(displayModel.toString());
     }
 
     @FXML
     public void clearData(MouseEvent event) {
         System.out.println("clearData");
 
-        currentData = null;
+        DisplayModel.getInstance().clear();
+
+        currentNumber = "0";
 
         DISPLAY.setText("0");
     }
 
     @FXML
-    public void addOperation(MouseEvent event) {
+    public void addOperation(MouseEvent event) throws InstantiationException, IllegalAccessException, MalformedURLException, ClassNotFoundException {
         System.out.println("addOperation");
         System.out.println(((Button) event.getSource()).getText());
+
+        Action selectedAction = OPERATIONS.getSelectionModel().getSelectedItem();
+        if (selectedAction == null) {
+            return;
+        }
+
+        if (selectedAction.getOperation().getType() == OperationType.FUNCTION && !(selectedAction.getOperation() instanceof RightParenthesis) ) {
+            Class<Operation> clazz = (Class<Operation>) ClassLoader.getSystemClassLoader().loadClass(RightParenthesis.class.getCanonicalName());
+            OPERATIONS.getItems().add(new Action(clazz, selectedAction.getSource()));
+        }
+
+
+        if (selectedAction.getOperation() instanceof RightParenthesis) {
+            OPERATIONS.getItems().remove(selectedAction);
+        }
+
+        currentNumber = "";
+
+        DisplayModel displayModel = DisplayModel.getInstance();
+
+        displayModel.addAction(selectedAction);
+
+        DISPLAY.setText(displayModel.toString());
+
+        System.out.println(displayModel.toString());
     }
 
     @FXML
@@ -99,10 +139,17 @@ public class CalculatorController {
         stage.setTitle("Plugin list");
         stage.initModality(Modality.WINDOW_MODAL);
         stage.initOwner(selfStage);
-        stage.show();
         stage.setOnCloseRequest(e -> refreshOperations());
+
+        stage.show();
     }
 
+    @FXML
+    public void calculate() {
+        LinkedList<DisplayItem> items = DisplayModel.getInstance().getDisplayItems();
+        CalculatorModel c = new CalculatorModel(items);
+        DISPLAY.setText(c.calc());
+    }
 
     @FXML
     void initialize() throws Exception {
@@ -110,10 +157,10 @@ public class CalculatorController {
     }
 
     private void refreshOperations() {
-        CalculatorModel calculatorModel = CalculatorModel.getInstance();
+        PluginModel pluginModel = PluginModel.getInstance();
         OPERATIONS.setItems(null);
 
-        ObservableList<Action> operationList = FXCollections.observableArrayList(calculatorModel.getAvailableActions());
+        ObservableList<Action> operationList = FXCollections.observableArrayList(pluginModel.getAvailableActions());
         OPERATIONS.setItems(operationList);
     }
 

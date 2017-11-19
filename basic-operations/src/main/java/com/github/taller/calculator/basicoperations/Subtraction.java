@@ -4,6 +4,8 @@ package com.github.taller.calculator.basicoperations;
 import com.github.taller.calculator.exports.AbstractOperation;
 import com.github.taller.calculator.exports.OperationType;
 
+import java.math.BigDecimal;
+
 public class Subtraction extends AbstractOperation {
 
     @Override
@@ -13,8 +15,11 @@ public class Subtraction extends AbstractOperation {
 
     @Override
     public String binary(String argLeft, String argRight) {
-        System.out.println("Subtraction.binary");
-        return "Subtraction.binary";
+        BigDecimal bd1 = new BigDecimal(argLeft);
+        BigDecimal bd2 = new BigDecimal(argRight);
+        BigDecimal bdResult = bd1.subtract(bd2);
+        System.out.println("Subtraction.binary " + bdResult);
+        return bdResult.toPlainString();
     }
 
     @Override

@@ -38,11 +38,11 @@
                     prefHeight="25.0" prefWidth="42.0" text="C"/>
             <Button fx:id="ERASE" layoutX="130.0" layoutY="200.0" mnemonicParsing="false" onMouseClicked="#removeDigit"
                     prefHeight="25.0" prefWidth="42.0" text="E"/>
-            <Button fx:id="START" layoutX="73.0" layoutY="379.0" mnemonicParsing="false" prefHeight="25.0"
-                    prefWidth="97.0" text="="/>
+            <Button fx:id="START" layoutX="73.0" layoutY="379.0" mnemonicParsing="false" onMouseClicked="#calculate"
+                    prefHeight="25.0" prefWidth="97.0" text="="/>
             <ComboBox fx:id="OPERATIONS" layoutX="194.0" layoutY="200.0" prefWidth="150.0"/>
-            <Button fx:id="ADD_OPERATION" layoutX="197.0" layoutY="237.0" mnemonicParsing="false" onMouseClicked="#addOperation"
-                    prefHeight="25.0" prefWidth="150.0" text="Add operation"/>
+            <Button fx:id="ADD_OPERATION" layoutX="197.0" layoutY="237.0" mnemonicParsing="false"
+                    onMouseClicked="#addOperation" prefHeight="25.0" prefWidth="150.0" text="Add operation"/>
             <Button fx:id="PLUGIN_LIST" layoutX="197.0" layoutY="379.0" mnemonicParsing="false"
                     onMouseClicked="#openPluginList" prefHeight="25.0" prefWidth="150.0" text="Manage plugins"/>
         </children>

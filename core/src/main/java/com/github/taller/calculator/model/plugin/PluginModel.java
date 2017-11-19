@@ -1,4 +1,4 @@
-package com.github.taller.calculator.model;
+package com.github.taller.calculator.model.plugin;
 
 import com.github.taller.calculator.exports.Operation;
 import com.github.taller.calculator.log.PrintMsg;
@@ -6,7 +6,7 @@ import com.github.taller.calculator.log.PrintMsg;
 import java.net.URL;
 import java.util.*;
 
-public final class CalculatorModel {
+public final class PluginModel {
 
     private LinkedList<Operation> operations = new LinkedList<>();
 
@@ -16,15 +16,15 @@ public final class CalculatorModel {
 
     private Collection<Action> availableActions = new ArrayList<>();
 
-    private CalculatorModel() {
+    private PluginModel() {
     }
 
-    public static CalculatorModel getInstance() {
+    public static PluginModel getInstance() {
         return HOLDER.MODEL;
     }
 
     private static class HOLDER {
-        private static CalculatorModel MODEL = new CalculatorModel();
+        private static PluginModel MODEL = new PluginModel();
     }
 
 
