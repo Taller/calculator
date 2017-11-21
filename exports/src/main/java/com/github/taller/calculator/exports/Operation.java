@@ -4,11 +4,11 @@ public interface Operation {
 
     OperationType getType();
 
-    String unary(String arg);
+    String unary(String arg) throws OperationException;
 
-    String binary(String argLeft, String argRight);
+    String binary(String argLeft, String argRight) throws OperationException;
 
-    String function(String ... arg);
+    String function(String ... arg) throws OperationException;
 
     boolean isFunction();
 }

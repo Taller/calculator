@@ -5,6 +5,8 @@ import com.github.taller.calculator.basicoperations.Division;
 import com.github.taller.calculator.basicoperations.Multiplication;
 import com.github.taller.calculator.basicoperations.Subtraction;
 import com.github.taller.calculator.exports.Operation;
+import com.github.taller.calculator.exports.OperationException;
+import com.github.taller.calculator.log.Print;
 import com.github.taller.calculator.model.display.DisplayItem;
 import com.github.taller.calculator.parentheses.RightParenthesis;
 
@@ -25,28 +27,39 @@ public class CalculatorModel {
     }
 
     public String calc() {
-        while (!(input.isEmpty() && actions.isEmpty())) {
-            DisplayItem item = input.pollFirst();
-            if (item == null) {
-                FunctionType type = functionCondition(item);
-                runFunction(type, item);
-                continue;
-            }
+        try {
+            while (!(input.isEmpty() && actions.isEmpty())) {
 
-            if (item.isNumber()) {
-                numbers.add(item);
-            }
+                DisplayItem item = input.pollFirst();
+                if (item == null) {
+                    FunctionType type = functionCondition(item);
+                    runFunction(type, item);
+                    continue;
+                }
 
-            if (item.isAction()) {
-                FunctionType type = functionCondition(item);
-                runFunction(type, item);
+                if (item.isNumber()) {
+                    numbers.add(item);
+                }
+
+                if (item.isAction()) {
+                    FunctionType type = functionCondition(item);
+                    runFunction(type, item);
+                }
             }
+        } catch (OperationException opEx) {
+            numbers.clear();
+            numbers.add(new DisplayItem(opEx.getMessage()));
+        } catch (Throwable t) {
+            numbers.clear();
+            numbers.add(new DisplayItem(t.getClass().getSimpleName() + " " + t.getMessage()));
+            // TODO unload operation
+            Print.msg("unload operation, remove from DisplayModel");
         }
 
         return numbers.toString();
     }
 
-    private void runFunction(FunctionType type, DisplayItem item) {
+    private void runFunction(FunctionType type, DisplayItem item) throws OperationException {
         switch (type) {
             case ONE:
                 actions.add(item);
@@ -95,7 +108,7 @@ public class CalculatorModel {
 
             Operation tFirstOperation = actions.peekLast().getAction().getOperation();
 
-            if (tFirstOperation.isFunction()){
+            if (tFirstOperation.isFunction()) {
                 return FunctionType.FIVE;
             }
 
@@ -114,7 +127,7 @@ public class CalculatorModel {
 
             Operation tFirstOperation = actions.peekLast().getAction().getOperation();
 
-            if (tFirstOperation.isFunction()){
+            if (tFirstOperation.isFunction()) {
                 return FunctionType.THREE;
             }
 
