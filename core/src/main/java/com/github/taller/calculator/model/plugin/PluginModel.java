@@ -1,16 +1,14 @@
 package com.github.taller.calculator.model.plugin;
 
-import com.github.taller.calculator.exports.Operation;
 import com.github.taller.calculator.log.Print;
 
 import java.net.URL;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.HashSet;
+import java.util.Iterator;
 
 public final class PluginModel {
-
-    private LinkedList<Operation> operations = new LinkedList<>();
-
-    private LinkedList<String> data = new LinkedList<>();
 
     private Collection<Plugin> plugins = new HashSet<>();
 

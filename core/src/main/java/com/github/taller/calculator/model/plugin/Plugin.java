@@ -1,12 +1,11 @@
 package com.github.taller.calculator.model.plugin;
 
 import com.github.taller.calculator.exports.Operation;
+import com.github.taller.calculator.exports.OperationsConfiguration;
+import com.github.taller.calculator.loader.PluginUrlLoader;
 import com.github.taller.calculator.log.Print;
 
-import java.io.BufferedReader;
-import java.io.InputStreamReader;
 import java.net.URL;
-import java.net.URLClassLoader;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -14,46 +13,35 @@ public class Plugin {
 
     private URL url;
 
-    private URLClassLoader cl;
+    private PluginUrlLoader pluginUrlLoader;
 
     private List<Action> actionList;
 
     public Plugin(URL url) throws Exception {
         this.url = url;
+        this.actionList = new ArrayList<>();
 
-        this.cl = URLClassLoader.newInstance(new URL[]{url});
-        Print.msg("" + this.cl);
-
-        URL properties = cl.findResource("operations.properties");
-        if (properties == null) {
-            properties = cl.getResource("operations.properties");
-        }
-
-        if (properties == null) {
-            Print.msg("operations.properties wasn't found.");
+        pluginUrlLoader = new PluginUrlLoader(new URL[]{url});
+        Class configurationClass = pluginUrlLoader.findClass("com.github.taller.calculator.Configuration");
+        if (configurationClass == null) {
+            Print.msg("Class not found in package " + url.getFile());
             return;
         }
 
-        actionList = new ArrayList<>();
-        Print.msg("adding actions from " + url.getFile());
+        OperationsConfiguration annotation = (OperationsConfiguration) configurationClass.getAnnotation(OperationsConfiguration.class);
+        if (annotation == null) {
+            Print.msg("Configuration wasn't defined correctly. Use OperationsConfiguration annotation.");
+            return;
+        }
 
-        String line = null;
-        BufferedReader br = new BufferedReader(new InputStreamReader(properties.openStream()));
-        while ( (line = br.readLine()) != null) {
-            String[] props = line.split("=");
-            if (props.length < 2) {
-                continue;
-            }
-
-            String className = props[1];
-            Class<Operation> clazz = (Class<Operation>) cl.loadClass(className);
-            actionList.add(new Action(clazz, url));
-            Print.msg("action added " + clazz.getCanonicalName());
+        Class<Operation>[] operationList = (Class<Operation>[]) annotation.provides();
+        for (Class<Operation> operation : operationList) {
+            actionList.add(new Action(operation, url));
+            Print.msg("action added " + operation);
         }
 
         if (actionList.isEmpty()) {
-            Print.msg("operations.properties is empty.");
-            return;
+            Print.msg("OperationsConfiguration is empty.");
         }
     }
 

@@ -47,7 +47,7 @@ public class Main extends Application {
             }
         });
 
-        PluginModel.getInstance().addPlugin(new URL("file:./basic-operations-1.0-SNAPSHOT.jar"));
+        PluginModel.getInstance().addPlugin(Main.class.getResource("/basic-operations-1.0-SNAPSHOT.jar"));
 
         firstTime = true;
         Platform.setImplicitExit(false);

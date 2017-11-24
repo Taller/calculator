@@ -60,7 +60,7 @@ public class CalculatorController {
     }
 
     @FXML
-    public void removeDigit(MouseEvent event) {
+    public void removeDigit() {
         Print.msg("removeDigit");
 
         DisplayModel displayModel = DisplayModel.getInstance();
@@ -85,7 +85,7 @@ public class CalculatorController {
     }
 
     @FXML
-    public void clearData(MouseEvent event) {
+    public void clearData() {
         Print.msg("clearData");
 
         DisplayModel.getInstance().clear();
@@ -94,7 +94,7 @@ public class CalculatorController {
     }
 
     @FXML
-    public void addOperation(MouseEvent event) throws InstantiationException, IllegalAccessException, MalformedURLException, ClassNotFoundException {
+    public void addOperation() throws InstantiationException, IllegalAccessException, MalformedURLException, ClassNotFoundException {
         Print.msg("addOperation");
 
         Action selectedAction = OPERATIONS.getSelectionModel().getSelectedItem();
@@ -119,7 +119,7 @@ public class CalculatorController {
     }
 
     @FXML
-    public void openPluginList(Event event) throws IOException {
+    public void openPluginList() throws IOException {
 
         Stage stage = new Stage();
         FXMLLoader loader = new FXMLLoader(Main.class.getResource("ui/PluginList.fxml"));
@@ -160,7 +160,7 @@ public class CalculatorController {
         while (ait.hasNext()) {
             Action action = ait.next();
 
-            if (action.getOperation() instanceof  RightParenthesis) {
+            if (action.getOperation() instanceof RightParenthesis) {
                 ait.remove();
                 break;
             }

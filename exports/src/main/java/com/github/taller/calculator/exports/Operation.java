@@ -8,7 +8,7 @@ public interface Operation {
 
     String binary(String argLeft, String argRight) throws OperationException;
 
-    String function(String ... arg) throws OperationException;
+    String function(String... arg) throws OperationException;
 
     boolean isFunction();
 }
